@@ -2,54 +2,267 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Tracking de Cargas</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking de Cargas - LogiAduana</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        .search-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: none;
+            margin-bottom: 2rem;
+        }
+        
+        .search-card .card-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1.25rem;
+        }
+        
+        .result-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: none;
+            margin-bottom: 2rem;
+        }
+        
+        .result-card .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1.25rem;
+        }
+        
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+            border-color: #86b7fe;
+        }
+        
+        .info-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-value {
+            color: #212529;
+            font-size: 1.1rem;
+        }
+        
+        .navigation-links a {
+            text-decoration: none;
+            color: #0d6efd;
+            font-weight: 500;
+            transition: color 0.3s;
+            margin-right: 1rem;
+        }
+        
+        .navigation-links a:hover {
+            color: #0a58ca;
+        }
+        
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pdf-button {
+            display: inline-block;
+            background-color: #dc3545;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .pdf-button:hover {
+            background-color: #bb2d3b;
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-row .col {
+                margin-bottom: 1rem;
+            }
+            
+            .form-row .col:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>📦 Tracking de Cargas</h1>
 
-    <!-- Formulario de búsqueda -->
-    <form th:action="@{/tracking}" method="post">
-        <label for="numeroGuia">Número de Guía:</label>
-        <input type="text" id="numeroGuia" name="numeroGuia" required>
-        <button type="submit">Buscar</button>
-    
-  <label for="desde">Desde:</label>
-  <input type="date" id="desde" name="desde">
-  <label for="hasta" style="margin-left:12px;">Hasta:</label>
-  <input type="date" id="hasta" name="hasta">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/dashboard}"><i class="fas fa-boxes me-2"></i>LogiAduana</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/dashboard}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/cargas}">Cargas</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/tracking}">Tracking</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/reportes}">Reportes</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/usuarios}">Usuarios</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-</form>
+    <div class="container mt-4">
+        <h1 class="mb-4"><i class="fas fa-shipping-fast me-2"></i>Tracking de Cargas</h1>
 
-    <hr>
+        <!-- Formulario de búsqueda -->
+        <div class="card search-card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-search me-2"></i>Buscar Carga</h3>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/tracking}" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="numeroGuia" class="form-label">Número de Guía:</label>
+                            <input type="text" class="form-control" id="numeroGuia" name="numeroGuia" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-5">
+                            <label for="desde" class="form-label">Desde:</label>
+                            <input type="date" class="form-control" id="desde" name="desde">
+                        </div>
+                        <div class="col-md-5">
+                            <label for="hasta" class="form-label">Hasta:</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search me-2"></i>Buscar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-    <!-- Si encuentra la carga -->
-    <div th:if="${carga != null}">
-        <h2>Resultado de búsqueda</h2>
-        <p><strong>Número de Guía:</strong> <span th:text="${carga.numeroGuia}"></span></p>
-        <p><strong>Cliente:</strong> <span th:text="${carga.cliente}"></span></p>
-        <p><strong>Descripción:</strong> <span th:text="${carga.descripcion}"></span></p>
-        <p><strong>Estado:</strong> <span th:text="${carga.estado}"></span></p>
+        <!-- Si encuentra la carga -->
+        <div th:if="${carga != null}">
+            <div class="card result-card">
+                <div class="card-header">
+                    <h3 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>Resultado de búsqueda</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <div class="info-label">Número de Guía:</div>
+                                <div class="info-value" th:text="${carga.numeroGuia}"></div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Cliente:</div>
+                                <div class="info-value" th:text="${carga.cliente}"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <div class="info-label">Descripción:</div>
+                                <div class="info-value" th:text="${carga.descripcion}"></div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Estado:</div>
+                                <div class="info-value" th:text="${carga.estado}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Si no encuentra nada -->
+        <div th:if="${error != null}">
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle me-2"></i><span th:text="${error}"></span>
+            </div>
+        </div>
+
+        <!-- Navegación y PDF -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <div class="navigation-links">
+                <a th:href="@{/dashboard}"><i class="fas fa-home me-1"></i>Dashboard</a>
+                <a th:href="@{/cargas}"><i class="fas fa-list me-1"></i>Ver Cargas</a>
+                <a th:href="@{/reportes}"><i class="fas fa-chart-bar me-1"></i>Reportes</a>
+            </div>
+            
+            <!-- Botón PDF visible cuando hay resultado -->
+            <div th:if="${carga != null}">
+                <a class="pdf-button" th:href="@{|/tracking/pdf?numeroGuia=${carga.numeroGuia}|}">
+                    <i class="fas fa-file-pdf me-2"></i>Imprimir PDF
+                </a>
+            </div>
+        </div>
     </div>
 
-    <!-- Si no encuentra nada -->
-    <div th:if="${error != null}">
-        <p style="color:red;" th:text="${error}"></p>
-    </div>
-
-    <hr>
-    <!-- Navegación -->
-    <a th:href="@{/dashboard}">🏠 Dashboard</a> |
-    <a th:href="@{/cargas}">📋 Ver Cargas</a> |
-    <a th:href="@{/reportes}">📊 Reportes</a>
-
-    <!-- Botón PDF visible cuando hay resultado -->
-    <div th:if="${carga != null}">
-        <p style="margin-top:10px;">
-            <a th:href="@{|/tracking/pdf?numeroGuia=${carga.numeroGuia}|}">🖨️ Imprimir PDF</a>
-        </p>
-    </div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
