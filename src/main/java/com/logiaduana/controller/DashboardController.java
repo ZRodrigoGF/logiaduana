@@ -18,8 +18,13 @@ public class DashboardController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        model.addAttribute("totalCargas", cargaRepository.count());
-        model.addAttribute("totalUsuarios", usuarioRepository.count());
-        return "dashboard"; // dashboard.html
+        long totalCargas = cargaRepository.count();
+        long totalUsuarios = usuarioRepository.count();
+
+        model.addAttribute("totalCargas", totalCargas);
+        model.addAttribute("totalUsuarios", totalUsuarios);
+        model.addAttribute("cargas", cargaRepository.findAll());
+
+        return "dashboard";
     }
 }
